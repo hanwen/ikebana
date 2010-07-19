@@ -341,14 +341,21 @@ class Notation_canvas (gnomecanvas.Canvas):
     #ugh: how to get pango_descr_from_string() in pygtk?
 
 	    if descr.find (',') == -1:
-		(fam,rest) = tuple (string.split (descr, ' '))
+		    (fam,rest) = tuple (string.split (descr, ' '))
 	    else:
-		(fam,rest) = tuple (string.split (descr, ','))
-	    size = string.atof (rest)
+		    (fam,rest) = tuple (string.split (descr, ','))
+	    if rest.find (' ') == -1:
+		    series = 'normal'
+		    size_str = rest
+	    else:
+		    series, size_str = rest.split (' ')
+	    size = string.atof (size_str)
 	    w = canvas.root().add (type,
 				   fill_color = 'black',
 				   family_set = True,
 				   family = fam,
+				   # series = series,
+				   # series_set = True,
 				   anchor = gtk.ANCHOR_SOUTH_WEST,
 				   y_offset = 0.75,
 				   size_points = size  * canvas.pixel_scale * 0.87  * magnification,
