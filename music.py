@@ -62,11 +62,11 @@ class Pitch:
 		return self.step + self.octave * 7
 	
 	def ly_step_expression (self): 
-		str = 'CDEFGAB'[self.step]
+		str = 'cdefgab'[self.step]
 		if self.alteration > 0:
-			str += '-Sharp'* (self.alteration/2)
+			str += 'is' * (self.alteration/2)
 		elif self.alteration < 0:
-			str += '-Flat'* (-self.alteration/2)
+			str += 'es' * (-self.alteration/2)
 		return str
 	
 	def ly_expression (self):
@@ -339,12 +339,12 @@ class ClefEvent (Event):
 		(make-music 'SequentialMusic
 		'elements (list
       (context-spec-music
-       (make-property-set 'clefGlyph "%s") 'Staff)
+       (make-property-set 'clefGlyph (symbol->string '%(glyph)s)) 'Staff)
       (context-spec-music
-       (make-property-set 'clefPosition %d) 'Staff)
+       (make-property-set 'clefPosition %(pos)d) 'Staff)
       (context-spec-music
-       (make-property-set 'middleCPosition %d) 'Staff)))
-""" % (glyph, pos, c0)
+       (make-property-set 'middleCPosition %(c0)d) 'Staff)))
+""" % locals ()
 		return clefsetting
 
 def test_expr ():
