@@ -137,6 +137,9 @@ class Lilypond_socket_parser:
             self.name = fields[2][1:-1]
 	    self.bbox = tuple (map (string.atof, fields[3:]))
             return
+        else:
+            print 'not implemented', fields[0]
+            return
 
         return self.interpret_socket_line (offset, self.cause_tag,
 					   self.bbox, self.name,
@@ -184,9 +187,12 @@ class Notation_controller:
         str = set_measure_number (str, 1 + bar_count.num)
         if bar_count.num > 0:
             str = add_key_sig (str)
-        
-	str = talk_to_lilypond (str)
-        self.parse_socket_file (str)
+
+        input = str
+        #print 'INPUT:>>>>', input, '<<<<'
+	output = talk_to_lilypond (input)
+        #print 'OUTPUT:>>>>', output, '<<<<'
+        self.parse_socket_file (output)
 
     def ensure_visible (self, when):
         new_start =  max ((when - measure_length).floor(), Rational(0))
