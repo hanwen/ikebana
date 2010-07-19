@@ -18,18 +18,13 @@
 }
 
 #(define (render-socket-music music socket)
-  (let*
-   ((score (ly:make-score music)) 
-    )
-
-   (ly:score-process score #f $defaultpaper $defaultlayout socket)
-  ))
-
-
+  (let* ((score (ly:make-score music)) 
+	 (book (ly:make-book-part (list score))))
+   (ly:book-process-to-systems book $defaultpaper $defaultlayout socket)))
 
 #(if #t
   (let ((s (socket PF_INET SOCK_STREAM 0)))
-       (setsockopt s SOL_SOCKET SO_REUSEADDR 1)
+   (setsockopt s SOL_SOCKET SO_REUSEADDR 1)
        ;; Specific address?
        ;; (bind s AF_INET (inet-aton "127.0.0.1") 2904)
        (bind s AF_INET INADDR_ANY 2904)
@@ -59,6 +54,8 @@
 	       (let* ((question (read client))
 		      (music (eval question (current-module))))
 
+		;;(format #t "QUESTION:>>>~a<<<<\n" question)
+		;;(format #t "MUSIC:>>>~a<<<<\n" music)
 		(render-socket-music music client)
                 (close client)
 		(display (format "Finished. Time elapsed: ~a\n"
@@ -85,5 +82,3 @@
 )
 
 #(render-socket-music test-exp "test")
-  
-
