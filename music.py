@@ -47,9 +47,10 @@ class Pitch:
 		self.octave = 0
 
 	def lisp_expression (self):
-		return '(ly:make-pitch %d %d %d)' % (self.octave,
+		print 'alteration', self.alteration, '-->', str (Rational (self.alteration))
+		return '(ly:make-pitch %d %d %s)' % (self.octave,
 						     self.step,
-						     self.alteration)
+						     str (Rational (self.alteration)))
 
 	def copy (self):
 		p = Pitch ()
@@ -64,9 +65,9 @@ class Pitch:
 	def ly_step_expression (self): 
 		str = 'cdefgab'[self.step]
 		if self.alteration > 0:
-			str += 'is' * (self.alteration/2)
+			str += 'is' * int (self.alteration*2)
 		elif self.alteration < 0:
-			str += 'es' * (-self.alteration/2)
+			str += 'es' * int (-self.alteration*2)
 		return str
 	
 	def ly_expression (self):
@@ -75,7 +76,6 @@ class Pitch:
 			str += "'" * (self.octave + 1) 
 		elif self.octave < -1:
 			str += "," * (-self.octave - 1) 
-			
 		return str
 
 class Music:
@@ -377,8 +377,8 @@ def test_expr ():
  	evc = EventChord()
 	tonic = Pitch ()
 	tonic.step = 2
-	tonic.alteration = -2
-	n = KeySignatureEvent(tonic, [0, 0, -2, 0, 0,-2,-2]  )
+	tonic.alteration = -0.5
+	n = KeySignatureEvent(tonic, [0, 0, -0.5, 0, 0,-0.5,-0.5]  )
 	evc.insert_around (None, n, 0)
 	m.insert_around (None, evc, 0)
 

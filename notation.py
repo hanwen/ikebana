@@ -18,7 +18,7 @@ def get_display_dpi():
         display_dpi = (string.atoi (m.group (2)) + string.atoi (m.group (2)))/2
 
 
-scale_alterations = [0, 0, -2, 0, 0,-2,-2]  
+scale_alterations = [0, 0, -0.5, 0, 0,-0.5,-0.5]
 
 copy_lilypond_input = 1
 time_sig = (4, 4)
@@ -54,7 +54,7 @@ def talk_to_lilypond (expression_str):
 	cont = len (data) > 0
 	retval += data
 
-    print retval
+    #print retval
     return retval
 
 def set_measure_number (str, num):
@@ -94,8 +94,8 @@ def add_start_skip (str, start_skip):
 
 def add_key_sig (str):
     e_flat = music.Pitch()
-    e_flat.step = 2
-    e_flat.alteration = -2
+    e_flat.step = 0.5
+    e_flat.alteration = -0.5
     ev = music.KeySignatureEvent (e_flat, scale_alterations)
     
     str = """(make-music 'SequentialMusic 'elements
@@ -189,9 +189,9 @@ class Notation_controller:
             str = add_key_sig (str)
 
         input = str
-        #print 'INPUT:>>>>', input, '<<<<'
+        print 'INPUT:>>>>', input, '<<<<'
 	output = talk_to_lilypond (input)
-        #print 'OUTPUT:>>>>', output, '<<<<'
+        print 'OUTPUT:>>>>', output, '<<<<'
         self.parse_socket_file (output)
 
     def ensure_visible (self, when):
